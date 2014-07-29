@@ -61,6 +61,10 @@ class Player
     @hand << newcard 
   end 
 
+  def clear_hand
+    hand.clear
+  end 
+
 
   def total_hand
     total = 0 
@@ -196,92 +200,75 @@ class Dealer < Player
 end
 
 
-#class Blackjack
-# attr_accessor :player, :card, :deck, :dealer 
+class Blackjack
+ attr_accessor :player1, :card, :deck1, :dealer, :name
 
-#  def initialize 
-#    @player = Player.new(name,card)
-#    @deck = Deck.new
-#    @dealer = Dealer.new(dealer, card)
-#    @card = Card.new(face,suit)
-#  end 
+  def initialize 
+    @deck1 = Deck.new
+    puts "Hey its you, welcome back to Blackjack"
+    sleep (1)
+    print "What was your name again?"
+    @name = gets.chomp
+    puts "Nice to see you again #{name}"
+    sleep(1) 
 
-#  def run
+    @player1 = Player.new(name,deck1.draw_card)
+    
+    @dealer = Dealer.new("Dealer", deck1.draw_card)
+   #@card = Card.new(face,suit)
+  end 
 
-#  end
+  def run
+    play_again = 'y'
 
-#end 
+    while play_again == 'y'
+    puts "OK lets play......"
+    sleep(1)
+    print "\n#{name} is dealt a "
+    player1.hand[0].show_card
+    sleep(1)
+    
+    print "\nDealer is dealt a "
+    dealer.hand[0].show_card
+    sleep(2)
 
-puts "Hey its you, welcome back to Blackjack"
-sleep (1)
-print "What was your name again?"
-name = gets.chomp 
+    player_card = deck1.draw_card 
+    print "\n#{name} your second card is a "
+    player1.new_card(player_card)
+    player_card.show_card
+    sleep(1)
 
-
-puts "Nice to see you again #{name}"
-sleep(1)
-
-play_again = 'y'
-
-while play_again == 'y'
-puts "OK lets play......"
-sleep(1)
-#Deck1 is an array of card objects 
-deck1 = Deck.new 
-
-#Player now has a name and a 1 card hand 
-player_card = deck1.draw_card 
-player1 = Player.new(name, player_card )
-
-print "\n#{name} is dealt a "
-player_card.show_card
-sleep(2)
-
-dealer_card = deck1.draw_card 
-dealer = Dealer.new("Dealer", dealer_card)
-print "\nDealer is dealt a "
-dealer_card.show_card
-sleep(2)
-
-player_card = deck1.draw_card 
-print "\n#{name} your second card is a "
-player1.new_card(player_card)
-player_card.show_card
-sleep(2)
-
-#need to show hand and total 
-player1.show_hand
-sleep(2)
+    #need to show hand and total 
+    player1.show_hand
+    sleep(2)
 
 
-dealer.new_card(deck1.draw_card)
+    dealer.new_card(deck1.draw_card)
 
 
-puts "\n#{player1.name}, you have #{player1.total_hand}" 
+    puts "\n#{player1.name}, you have #{player1.total_hand}" 
 
 #nextcard.show_card
-print "Dealer shows a "
+    print "Dealer shows a "
 
-face = dealer.hand[0].showing(dealer.hand[0])
-puts face 
+    face = dealer.hand[0].showing(dealer.hand[0])
+    puts face 
 
-#logic below accounts for blackjack for player and a tie for blackjack
-if player1.total_hand == 21
-  puts "BLACKJACK!!"
-  sleep(1)
-  if face == 10 || face == 11 
-  puts "Dealer has #{face} showing lets see if he has blackjack too"
-  sleep(2)
+    #logic below accounts for blackjack for player and a tie for blackjack
+    if player1.total_hand == 21
+    puts "BLACKJACK!!"
+    sleep(1)
+    if face == 10 || face == 11 
+    puts "Dealer has #{face} showing lets see if he has blackjack too"
+    sleep(2)
     if dealer.total_hand == 21 
     puts "Sorry, dealer has blackjack too, its a push" 
     sleep(1)
     else 
     puts "Congrats, you win!!!"
     end 
-  end 
-
-
-else 
+    end 
+  else 
   if face == 10 || face == 11 
   puts "Dealer has #{face} showing lets see if he has blackjack"
   sleep(2)
@@ -336,6 +323,24 @@ puts "Would you like to play again press (y or n)"
 play_again = gets.chomp 
 
 if play_again == 'n'
-  puts "Thanks for playing again #{name}, come back soon" 
+  puts "Thanks for playing again #{name}, come back soon"
+
+elsif play_again == 'y' 
+  
+    deck1 = Deck.new
+    player1.clear_hand
+    dealer.clear_hand
+    player1.new_card(deck1.draw_card)
+    dealer.new_card(deck1.draw_card)
+    
+
 end 
 end 
+
+
+end
+
+end 
+
+blackjack = Blackjack.new.run 
+
